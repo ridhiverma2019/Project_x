@@ -13,10 +13,24 @@ pipeline {
             }
         }
 
-        stage('Setup Python') {
+        stage('Debug Environment') {
+            steps {
+                bat 'echo Checking Python installation...'
+                bat 'where python'
+                bat 'python --version'
+                bat 'dir'
+            }
+        }
+
+        stage('Create Virtual Environment') {
             steps {
                 bat 'python -m venv %VENV%'
-                bat '%VENV%\\Scripts\\pip install --upgrade pip'
+            }
+        }
+
+        stage('Upgrade Pip') {
+            steps {
+                bat '%VENV%\\Scripts\\python -m pip install --upgrade pip'
             }
         }
 
@@ -26,17 +40,15 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Verify Installation') {
             steps {
-                echo "No tests configured yet"
-                // Example:
-                // bat '%VENV%\\Scripts\\pytest'
+                bat '%VENV%\\Scripts\\pip list'
             }
         }
 
-        stage('Build Successful') {
+        stage('Build Success') {
             steps {
-                echo "Pipeline executed successfully!"
+                echo "Build completed successfully 🚀"
             }
         }
     }
